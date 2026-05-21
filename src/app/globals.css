@@ -1,0 +1,90 @@
+@import "tailwindcss";
+
+@theme {
+  --color-seafoam: #5B9E8F;
+  --color-seafoam-dark: #4E8A7D;
+  --color-seafoam-deeper: #437A6D;
+  --color-amber: #C4935A;
+  --color-amber-label: #A07A45;
+  --color-charcoal: #1A1816;
+  --color-coral: #C4705E;
+  --color-rose: #D4786A;
+  --color-muted-red: #B85450;
+  --color-sage: #6B9E7A;
+  --color-soft-blue: #6B8EB5;
+  --color-soft-blue-label: #5A7A9E;
+  --color-parchment: #FAF8F5;
+  --color-stone: #6B6560;
+  --color-dust: #9E9790;
+  --color-sand: #E8E4DF;
+  --color-muted-stone: #D0CDC9;
+  --color-warm-bg: #F2EFEB;
+
+  --font-display: 'DM Serif Display', Georgia, 'Times New Roman', serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', monospace;
+}
+
+html {
+  background-color: #FAF8F5;
+}
+
+body {
+  font-family: var(--font-body);
+  color: #1A1816;
+  background-color: #FAF8F5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(1.0);
+    box-shadow: 0 0 15px rgba(91, 158, 143, 0.1);
+  }
+  50% {
+    transform: scale(1.15);
+    box-shadow: 0 0 40px rgba(91, 158, 143, 0.3);
+  }
+}
+
+@keyframes bloom {
+  0% { box-shadow: 0 0 0 rgba(196, 147, 90, 0); }
+  30% { box-shadow: 0 0 12px rgba(196, 147, 90, 0.4); }
+  100% { box-shadow: 0 0 0 rgba(196, 147, 90, 0); }
+}
+
+@keyframes wave-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-breathe {
+  animation: breathe 8s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+}
+
+.animate-bloom {
+  animation: bloom 600ms ease-out;
+}
+
+.animate-wave {
+  animation: wave-scroll 4s linear infinite;
+}
+
+.animate-fade-in {
+  animation: fade-in 300ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-breathe,
+  .animate-bloom,
+  .animate-wave,
+  .animate-fade-in {
+    animation: none !important;
+  }
+}
