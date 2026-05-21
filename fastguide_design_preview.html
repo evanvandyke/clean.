@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fast Guide — Design Preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Serif+Display&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --seafoam: #5B9E8F;
+    --seafoam-dark: #4E8A7D;
+    --amber: #C4935A;
+    --charcoal: #1A1816;
+    --coral: #C4705E;
+    --rose: #D4786A;
+    --muted-red: #B85450;
+    --sage: #6B9E7A;
+    --soft-blue: #6B8EB5;
+    --bg-primary: #FAF8F5;
+    --bg-secondary: #FFFFFF;
+    --text-primary: #1A1816;
+    --text-secondary: #6B6560;
+    --text-tertiary: #9E9790;
+    --border-subtle: #E8E4DF;
+    --border-muted: #D0CDC9;
+    --shadow-1: 0 1px 3px rgba(26,24,22,0.04), 0 1px 2px rgba(26,24,22,0.06);
+    --shadow-2: 0 4px 12px rgba(26,24,22,0.06), 0 1px 4px rgba(26,24,22,0.04);
+    --shadow-3: 0 8px 24px rgba(26,24,22,0.08), 0 2px 8px rgba(26,24,22,0.04);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #2A2725;
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 48px 24px;
+  }
+
+  .page-header {
+    text-align: center;
+    margin-bottom: 56px;
+  }
+
+  .page-header .wordmark {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    color: #FAF8F5;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+  }
+
+  .page-header .wordmark .period {
+    color: var(--seafoam);
+  }
+
+  .page-header .tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    color: #9E9790;
+    font-weight: 400;
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+
+  .page-header .subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #6B6560;
+    letter-spacing: 0.05em;
+  }
+
+  /* Phone Mockups */
+  .mockup-row {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-bottom: 72px;
+  }
+
+  .phone-frame {
+    width: 375px;
+    height: 812px;
+    background: var(--bg-primary);
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.05);
+  }
+
+  .phone-frame .notch {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    height: 34px;
+    background: #1A1816;
+    border-radius: 0 0 20px 20px;
+    z-index: 10;
+  }
+
+  .phone-frame .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 28px 0;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    height: 50px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .phone-content {
+    padding: 8px 20px 20px;
+    height: calc(100% - 50px - 64px);
+    overflow-y: auto;
+  }
+
+  .phone-content::-webkit-scrollbar { display: none; }
+
+  /* Dashboard Screen */
+  .dashboard-header {
+    margin-bottom: 20px;
+    padding-top: 4px;
+  }
+
+  .dashboard-header .greeting {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .dashboard-header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  /* Status Card */
+  .status-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: var(--shadow-3);
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .status-card .day-label {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+  }
+
+  .status-card .hour-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+  }
+
+  .progress-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: var(--border-subtle);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    width: 42.8%;
+    background: linear-gradient(90deg, var(--seafoam), var(--amber));
+    border-radius: 4px;
+    transition: width 1s ease-out;
+  }
+
+  .progress-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  /* Today Card */
+  .today-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-1);
+    margin-bottom: 16px;
+  }
+
+  .today-card .section-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+  }
+
+  .today-card h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .today-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* Quick Actions */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .action-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-1);
+    cursor: pointer;
+    transition: all 300ms ease-out;
+  }
+
+  .action-btn:hover {
+    box-shadow: var(--shadow-2);
+    transform: translateY(-2px);
+    border-color: var(--seafoam);
+  }
+
+  .action-btn .icon {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .action-btn .icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--text-secondary);
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .action-btn.stop .icon svg {
+    stroke: var(--muted-red);
+  }
+
+  .action-btn .label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  /* Semantic action card tints */
+  .action-btn.checklist {
+    border-color: rgba(196, 147, 90, 0.25);
+    background: rgba(196, 147, 90, 0.04);
+  }
+  .action-btn.checklist .icon svg { stroke: var(--amber); }
+  .action-btn.checklist .label { color: #A07A45; }
+
+  .action-btn.vitals {
+    border-color: rgba(107, 142, 181, 0.25);
+    background: rgba(107, 142, 181, 0.04);
+  }
+  .action-btn.vitals .icon svg { stroke: var(--soft-blue); }
+  .action-btn.vitals .label { color: #5A7A9E; }
+
+  .action-btn.guide {
+    border-color: rgba(91, 158, 143, 0.25);
+    background: rgba(91, 158, 143, 0.04);
+  }
+  .action-btn.guide .icon svg { stroke: var(--seafoam); }
+  .action-btn.guide .label { color: #4E8A7D; }
+
+  .action-btn.stop {
+    border-color: rgba(184, 84, 80, 0.25);
+    background: rgba(184, 84, 80, 0.04);
+  }
+  .action-btn.stop .icon svg { stroke: var(--muted-red); }
+  .action-btn.stop .label { color: var(--muted-red); }
+
+  /* Bottom Nav */
+  .bottom-nav {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-secondary);
+    border-top: 1px solid var(--border-subtle);
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0 24px;
+    height: 64px;
+  }
+
+  .nav-tab {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    text-decoration: none;
+  }
+
+  .nav-tab .nav-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-tab .nav-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--text-tertiary);
+    stroke-width: 1.75;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .nav-tab.active .nav-icon svg {
+    stroke: var(--seafoam);
+  }
+
+  .nav-tab .nav-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+  }
+
+  .nav-tab.active .nav-label {
+    color: var(--seafoam);
+    font-weight: 600;
+  }
+
+  /* SOS FAB */
+  .sos-fab {
+    position: absolute;
+    bottom: 80px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: var(--seafoam);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 14px rgba(91,158,143,0.25);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 20;
+    transition: all 300ms ease-out;
+  }
+
+  .sos-fab:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(91,158,143,0.3);
+  }
+
+  /* ===== SOS SCREEN (Second Phone) ===== */
+  .sos-screen {
+    background: var(--bg-primary);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+    position: relative;
+  }
+
+  .sos-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: none;
+    color: var(--text-tertiary);
+    font-size: 22px;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 5;
+  }
+
+  /* Breathing Circle */
+  .breathing-circle {
+    width: 160px;
+    height: 160px;
+    border: 3px solid var(--seafoam);
+    border-radius: 50%;
+    background: rgba(91, 158, 143, 0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    animation: breathe 8s var(--ease-breathe, cubic-bezier(0.45, 0.05, 0.55, 0.95)) infinite;
+    margin-bottom: 40px;
+  }
+
+  @keyframes breathe {
+    0%, 100% {
+      transform: scale(1.0);
+      box-shadow: 0 0 15px rgba(91, 158, 143, 0.1);
+    }
+    50% {
+      transform: scale(1.15);
+      box-shadow: 0 0 40px rgba(91, 158, 143, 0.3);
+    }
+  }
+
+  .breathing-circle .breathe-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--seafoam);
+    text-transform: uppercase;
+    animation: breathe-text 8s var(--ease-breathe, cubic-bezier(0.45, 0.05, 0.55, 0.95)) infinite;
+  }
+
+  @keyframes breathe-text {
+    0%, 45% { content: "breathe in"; }
+    50%, 95% { content: "breathe out"; }
+  }
+
+  /* Sine Wave */
+  .wave-container {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .wave-container svg {
+    width: 200%;
+    height: 100%;
+    animation: wave-scroll 4s linear infinite;
+  }
+
+  @keyframes wave-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .sos-reassurance {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .sos-reassurance h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .sos-reassurance .timer {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .sos-exit-btn {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 14px 32px;
+    border: 1.5px solid var(--border-subtle);
+    border-radius: 500px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 300ms ease-out;
+  }
+
+  .sos-exit-btn:hover {
+    background: rgba(91,158,143,0.06);
+    border-color: var(--seafoam);
+    color: var(--seafoam);
+  }
+
+  /* ===== STYLE GUIDE SECTION ===== */
+  .style-section {
+    max-width: 900px;
+    margin: 0 auto 64px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: #FAF8F5;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  /* Color Swatches */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .swatch {
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .swatch-color {
+    height: 80px;
+    width: 100%;
+  }
+
+  .swatch-info {
+    padding: 12px 14px;
+  }
+
+  .swatch-name {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FAF8F5;
+    margin-bottom: 4px;
+  }
+
+  .swatch-hex {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #9E9790;
+  }
+
+  /* Typography Samples */
+  .type-samples {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 40px;
+  }
+
+  .type-sample {
+    margin-bottom: 24px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .type-sample:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+
+  .type-sample .meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .type-display {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--text-primary);
+    line-height: 1.2;
+  }
+
+  .type-h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: var(--text-primary);
+    line-height: 1.25;
+  }
+
+  .type-h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--text-primary);
+    line-height: 1.3;
+  }
+
+  .type-body-lg {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .type-body {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+  }
+
+  .type-mono {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .type-overline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+  }
+
+  /* Component Samples */
+  .component-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 700px) {
+    .component-grid { grid-template-columns: 1fr; }
+    .mockup-row { gap: 24px; }
+    .phone-frame { transform: scale(0.85); transform-origin: top center; }
+  }
+
+  .component-card {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .component-card h3 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 20px;
+  }
+
+  .btn-primary {
+    background: var(--seafoam);
+    color: #FFFFFF;
+    padding: 14px 28px;
+    border: none;
+    border-radius: 500px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(91,158,143,0.2);
+    transition: all 300ms ease-out;
+    min-height: 48px;
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 12px;
+  }
+
+  .btn-primary:hover {
+    background: var(--seafoam-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(91,158,143,0.25);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-secondary);
+    padding: 14px 28px;
+    border: 1.5px solid var(--border-subtle);
+    border-radius: 500px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 300ms ease-out;
+    min-height: 48px;
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 12px;
+  }
+
+  .btn-secondary:hover {
+    background: rgba(91,158,143,0.06);
+    border-color: var(--seafoam);
+    color: var(--seafoam);
+  }
+
+  .btn-destructive {
+    background: transparent;
+    color: var(--muted-red);
+    padding: 14px 28px;
+    border: 1.5px solid var(--muted-red);
+    border-radius: 500px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 300ms ease-out;
+    min-height: 48px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+
+  .btn-destructive:hover {
+    background: var(--muted-red);
+    color: #FFFFFF;
+  }
+
+  /* Input sample */
+  .input-sample {
+    width: 100%;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 14px 16px;
+    border: 1.5px solid var(--border-subtle);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    transition: all 150ms ease-out;
+    min-height: 48px;
+    margin-bottom: 12px;
+  }
+
+  .input-sample:focus {
+    outline: none;
+    border-color: var(--seafoam);
+    box-shadow: 0 0 0 3px rgba(91,158,143,0.12);
+  }
+
+  .input-sample::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  /* Checkbox sample */
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+  }
+
+  .checkbox-box {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border-muted);
+    border-radius: 6px;
+    background: var(--bg-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 150ms ease-out;
+    flex-shrink: 0;
+  }
+
+  .checkbox-row.checked .checkbox-box {
+    background: var(--amber);
+    border-color: var(--amber);
+    animation: bloom 600ms ease-out;
+  }
+
+  @keyframes bloom {
+    0% { box-shadow: 0 0 0 rgba(196,147,90,0); }
+    30% { box-shadow: 0 0 12px rgba(196,147,90,0.4); }
+    100% { box-shadow: 0 0 0 rgba(196,147,90,0); }
+  }
+
+  .checkbox-box svg {
+    width: 14px;
+    height: 14px;
+    opacity: 0;
+  }
+
+  .checkbox-row.checked .checkbox-box svg {
+    opacity: 1;
+  }
+
+  .checkbox-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .checkbox-row.checked .checkbox-label {
+    text-decoration: line-through;
+    color: var(--text-tertiary);
+  }
+
+  /* Signature callouts */
+  .signature-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  @media (max-width: 700px) {
+    .signature-grid { grid-template-columns: 1fr; }
+  }
+
+  .signature-card {
+    background: rgba(91, 158, 143, 0.06);
+    border: 1px solid rgba(91, 158, 143, 0.15);
+    border-radius: 16px;
+    padding: 24px;
+  }
+
+  .signature-card .sig-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .signature-card h4 {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #FAF8F5;
+    margin-bottom: 8px;
+  }
+
+  .signature-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #9E9790;
+  }
+
+  /* Status badges */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 500px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+
+  .badge.success { background: rgba(107,158,122,0.1); color: #5A8A6A; }
+  .badge.error { background: rgba(184,84,80,0.1); color: #B85450; }
+  .badge.warning { background: rgba(196,112,94,0.1); color: #B86450; }
+  .badge.info { background: rgba(107,142,181,0.1); color: #5A7A9E; }
+
+  /* Card sample */
+  .sample-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow-1);
+    transition: all 300ms ease-out;
+    cursor: pointer;
+  }
+
+  .sample-card:hover {
+    box-shadow: var(--shadow-2);
+    transform: translateY(-2px);
+    border-color: var(--seafoam);
+  }
+
+  .sample-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .sample-card p {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text-secondary);
+  }
+
+  /* Footer */
+  .preview-footer {
+    text-align: center;
+    padding: 48px 0 24px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .preview-footer p {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #6B6560;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="wordmark">Fast Guide<span class="period">.</span></div>
+  <div class="tagline">Breathe through it. One sip at a time.</div>
+  <div class="subtitle">Design Preview · Version 1.0</div>
+</div>
+
+<!-- PHONE MOCKUPS -->
+<div class="mockup-row">
+
+  <!-- PHONE 1: Dashboard -->
+  <div class="phone-frame">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>9:41</span>
+      <span style="letter-spacing: 2px;">···</span>
+    </div>
+    <div class="phone-content">
+      <div class="dashboard-header">
+        <div class="greeting">Day 3 of 7</div>
+        <h1>The Shift</h1>
+      </div>
+
+      <!-- Status Card -->
+      <div class="status-card">
+        <div class="day-label">Day 3 — Hour 62</div>
+        <div class="hour-label">42.8% complete</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill"></div>
+        </div>
+        <div class="progress-label">~106 hours remaining</div>
+      </div>
+
+      <!-- Today Card -->
+      <div class="today-card">
+        <div class="section-label">What to expect today</div>
+        <h3>The fog lifts</h3>
+        <p>Ketosis is established. Hunger significantly reduced. You may notice heightened taste and a sense of quiet clarity.</p>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="quick-actions">
+        <div class="action-btn checklist">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+          <span class="label">Checklist</span>
+        </div>
+        <div class="action-btn vitals">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+          <span class="label">Log Vitals</span>
+        </div>
+        <div class="action-btn guide">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+          <span class="label">Day Guide</span>
+        </div>
+        <div class="action-btn stop">
+          <span class="icon"><svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span>
+          <span class="label">Stop Criteria</span>
+        </div>
+      </div>
+
+      <!-- Checklist Preview -->
+      <div class="today-card" style="margin-bottom: 0;">
+        <div class="section-label">Today's checklist · 4/12</div>
+        <div class="checkbox-row checked" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">Morning LMNT packet</span>
+        </div>
+        <div class="checkbox-row checked" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">Morning bone broth</span>
+        </div>
+        <div class="checkbox-row checked" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">Midday LMNT packet</span>
+        </div>
+        <div class="checkbox-row checked" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">80oz water minimum</span>
+        </div>
+        <div class="checkbox-row" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">Afternoon LMNT packet</span>
+        </div>
+        <div class="checkbox-row" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">Evening bone broth</span>
+        </div>
+        <div class="checkbox-row" onclick="this.classList.toggle('checked')">
+          <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+          <span class="checkbox-label">Magnesium 200mg</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SOS FAB -->
+    <button class="sos-fab" title="SOS — Craving help">SOS</button>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <a class="nav-tab active" href="#">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></span>
+        <span class="nav-label">Home</span>
+      </a>
+      <a class="nav-tab" href="#">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span class="nav-label">Guide</span>
+      </a>
+      <a class="nav-tab" href="#">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+        <span class="nav-label">Checklist</span>
+      </a>
+      <a class="nav-tab" href="#">
+        <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+        <span class="nav-label">Vitals</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- PHONE 2: SOS Breathing Screen -->
+  <div class="phone-frame">
+    <div class="notch"></div>
+    <div class="status-bar">
+      <span>2:14</span>
+      <span style="letter-spacing: 2px;">···</span>
+    </div>
+    <div class="sos-screen">
+      <button class="sos-close">✕</button>
+
+      <!-- Breathing Circle -->
+      <div class="breathing-circle">
+        <span class="breathe-label" id="breatheLabel">Breathe in</span>
+      </div>
+
+      <!-- Sine Wave -->
+      <div class="wave-container">
+        <svg viewBox="0 0 800 80" preserveAspectRatio="none">
+          <path d="M0,40 C50,10 100,10 150,40 C200,70 250,70 300,40 C350,10 400,10 450,40 C500,70 550,70 600,40 C650,10 700,10 750,40 C800,70 850,70 900,40 C950,10 1000,10 1050,40 C1100,70 1150,70 1200,40 C1250,10 1300,10 1350,40 C1400,70 1450,70 1500,40 C1550,10 1600,10 1600,40"
+                stroke="#5B9E8F" stroke-width="2" fill="none" opacity="0.6"/>
+        </svg>
+      </div>
+
+      <!-- Reassurance -->
+      <div class="sos-reassurance">
+        <h2>This will pass</h2>
+        <span class="timer">12:47 remaining</span>
+      </div>
+
+      <!-- Exit Button -->
+      <button class="sos-exit-btn">I'm okay now</button>
+    </div>
+  </div>
+</div>
+
+<!-- STYLE GUIDE -->
+
+<!-- Colors -->
+<div class="style-section">
+  <h2 class="section-title">Color Palette</h2>
+
+  <div class="swatch-grid">
+    <div class="swatch">
+      <div class="swatch-color" style="background: #5B9E8F;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Seafoam Teal</div>
+        <div class="swatch-hex">#5B9E8F</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #C4935A;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Warm Amber</div>
+        <div class="swatch-hex">#C4935A</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #C4705E;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Muted Coral</div>
+        <div class="swatch-hex">#C4705E</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #B85450;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Muted Red</div>
+        <div class="swatch-hex">#B85450</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #6B9E7A;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Sage</div>
+        <div class="swatch-hex">#6B9E7A</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #6B8EB5;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Soft Blue</div>
+        <div class="swatch-hex">#6B8EB5</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #FAF8F5;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Parchment Cream</div>
+        <div class="swatch-hex">#FAF8F5</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #1A1816;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Warm Charcoal</div>
+        <div class="swatch-hex">#1A1816</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #6B6560;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Stone Gray</div>
+        <div class="swatch-hex">#6B6560</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #9E9790;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Dust Gray</div>
+        <div class="swatch-hex">#9E9790</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #E8E4DF;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Warm Sand</div>
+        <div class="swatch-hex">#E8E4DF</div>
+      </div>
+    </div>
+    <div class="swatch">
+      <div class="swatch-color" style="background: #D0CDC9;"></div>
+      <div class="swatch-info">
+        <div class="swatch-name">Muted Stone</div>
+        <div class="swatch-hex">#D0CDC9</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Typography -->
+<div class="style-section">
+  <h2 class="section-title">Typography</h2>
+
+  <div class="type-samples">
+    <div class="type-sample">
+      <div class="meta">Display · DM Serif Display · 36px · 400</div>
+      <div class="type-display">Day 2 — The Wall</div>
+    </div>
+    <div class="type-sample">
+      <div class="meta">H1 · DM Serif Display · 28px · 400</div>
+      <div class="type-h1">The Shift</div>
+    </div>
+    <div class="type-sample">
+      <div class="meta">H2 · DM Serif Display · 22px · 400</div>
+      <div class="type-h2">What's happening inside</div>
+    </div>
+    <div class="type-sample">
+      <div class="meta">Body Large · DM Sans · 18px · 400 · 1.6</div>
+      <div class="type-body-lg">Ketosis is established. Autophagy is accelerating. Your brain is switching to ketone fuel. Growth hormone is 2-3x baseline.</div>
+    </div>
+    <div class="type-sample">
+      <div class="meta">Body · DM Sans · 16px · 400 · 1.55</div>
+      <div class="type-body">Maintain electrolytes even though you feel better. Feeling good doesn't mean you don't need sodium.</div>
+    </div>
+    <div class="type-sample">
+      <div class="meta">Mono · JetBrains Mono · 16px · 500</div>
+      <div class="type-mono">Day 3 — Hour 62 · 12:47 remaining</div>
+    </div>
+    <div class="type-sample" style="border-bottom: none; padding-bottom: 0; margin-bottom: 0;">
+      <div class="meta">Overline · DM Sans · 11px · 700 · 0.08em · uppercase</div>
+      <div class="type-overline">Daily Essentials</div>
+    </div>
+  </div>
+</div>
+
+<!-- Components -->
+<div class="style-section">
+  <h2 class="section-title">Components</h2>
+
+  <div class="component-grid">
+    <!-- Buttons -->
+    <div class="component-card">
+      <h3>Buttons</h3>
+      <button class="btn-primary">Start Fast</button>
+      <button class="btn-secondary">View All Days</button>
+      <button class="btn-destructive">End Fast</button>
+    </div>
+
+    <!-- Inputs -->
+    <div class="component-card">
+      <h3>Inputs</h3>
+      <input class="input-sample" type="text" placeholder="Blood pressure (systolic)">
+      <input class="input-sample" type="text" placeholder="Notes — how are you feeling?" style="margin-bottom: 0;">
+    </div>
+
+    <!-- Checkboxes -->
+    <div class="component-card">
+      <h3>Checklist Items</h3>
+      <div class="checkbox-row checked" onclick="this.classList.toggle('checked')">
+        <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+        <span class="checkbox-label">Morning LMNT packet</span>
+      </div>
+      <div class="checkbox-row" onclick="this.classList.toggle('checked')">
+        <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+        <span class="checkbox-label">Afternoon electrolytes</span>
+      </div>
+      <div class="checkbox-row" onclick="this.classList.toggle('checked')">
+        <div class="checkbox-box"><svg viewBox="0 0 14 14" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2.5 7 5.5 10.5 11.5 3.5"/></svg></div>
+        <span class="checkbox-label">Evening bone broth</span>
+      </div>
+    </div>
+
+    <!-- Status Badges -->
+    <div class="component-card">
+      <h3>Status Badges</h3>
+      <span class="badge success">● On Track</span>
+      <span class="badge warning">● Watch For</span>
+      <span class="badge error">● Stop Criteria</span>
+      <span class="badge info">● Day Info</span>
+    </div>
+
+    <!-- Card -->
+    <div class="component-card" style="grid-column: span 2;">
+      <h3>Interactive Card</h3>
+      <div class="sample-card">
+        <h4>Day 4 — Deep Clean</h4>
+        <p>Autophagy at peak intensity. Stem cell activation underway. Immune system regenerating. Growth hormone 3-5x baseline.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Signature Details -->
+<div class="style-section">
+  <h2 class="section-title">Signature Details — Don't Drop These</h2>
+
+  <div class="signature-grid">
+    <div class="signature-card">
+      <span class="sig-icon">🌊</span>
+      <h4>The Breathing Wave</h4>
+      <p>15-minute sine wave that subsides as the craving passes. Breathing circle pulses 4s in / 4s out with a teal glow. The soul of the app.</p>
+    </div>
+    <div class="signature-card">
+      <span class="sig-icon">✨</span>
+      <h4>Amber Completion Bloom</h4>
+      <p>Checkboxes bloom with warm amber glow on completion. box-shadow: 0 0 12px rgba(196,147,90,0.4) fading over 600ms.</p>
+    </div>
+    <div class="signature-card">
+      <span class="sig-icon">🔵</span>
+      <h4>The Teal Period</h4>
+      <p>"Fast Guide." — the period renders in seafoam teal #5B9E8F. A small tell connecting the wordmark to the wave.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="preview-footer">
+  <p>Fast Guide · Design Preview v1.0 · Light Theme</p>
+  <p style="margin-top: 8px; color: #4a4540;">Breathe through it. One sip at a time.</p>
+</div>
+
+<!-- Breathing text animation -->
+<script>
+  const label = document.getElementById('breatheLabel');
+  if (label) {
+    let inhaling = true;
+    setInterval(() => {
+      inhaling = !inhaling;
+      label.textContent = inhaling ? 'Breathe in' : 'Breathe out';
+    }, 4000);
+  }
+
+  // Make checkboxes in the preview interactive with bloom re-trigger
+  document.querySelectorAll('.checkbox-row').forEach(row => {
+    row.addEventListener('click', () => {
+      const box = row.querySelector('.checkbox-box');
+      if (row.classList.contains('checked')) {
+        box.style.animation = 'none';
+        void box.offsetHeight; // reflow
+        box.style.animation = 'bloom 600ms ease-out';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
