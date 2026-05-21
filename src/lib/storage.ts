@@ -81,6 +81,26 @@ export function setVitalsEntry(key: string, entry: VitalsEntry) {
   setItem("vitals", all);
 }
 
+export function deleteVitalsEntry(key: string) {
+  const all = getVitals();
+  delete all[key];
+  setItem("vitals", all);
+}
+
+export function getWaterOz(day: number): number {
+  const all = getChecklists();
+  const key = `day${day}`;
+  return (all[key]?.waterOz as unknown as number) || 0;
+}
+
+export function setWaterOz(day: number, oz: number) {
+  const all = getChecklists();
+  const key = `day${day}`;
+  if (!all[key]) all[key] = {};
+  (all[key] as Record<string, unknown>).waterOz = oz;
+  setItem("checklists", all);
+}
+
 export function clearAllData() {
   if (typeof window === "undefined") return;
   localStorage.removeItem("pin");

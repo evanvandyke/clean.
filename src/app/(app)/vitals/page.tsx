@@ -5,6 +5,7 @@ import TopBar from "@/components/TopBar";
 import {
   getVitals,
   setVitalsEntry,
+  deleteVitalsEntry,
   getFastConfig,
   getFastProgress,
   VitalsEntry,
@@ -23,6 +24,7 @@ export default function VitalsPage() {
   const [notes, setNotes] = useState("");
   const [entries, setEntries] = useState<[string, VitalsEntry][]>([]);
   const [saved, setSaved] = useState(false);
+  const [editingKey, setEditingKey] = useState<string | null>(null);
 
   // Load previous entries
   useEffect(() => {
@@ -33,13 +35,28 @@ export default function VitalsPage() {
     setEntries(sorted);
   }, [saved]);
 
+  const resetForm = useCallback(() => {
+    setSystolic("");
+    setDiastolic("");
+    setHeartRate("");
+    setWeight("");
+    setEnergy(null);
+    setMood(null);
+    setNotes("");
+    setEditingKey(null);
+  }, []);
+
   const handleSave = useCallback(() => {
-    const config = getFastConfig();
-    const day = config ? getFastProgress(config).currentDay : 1;
-    const key = `day${day}-${timeOfDay}`;
+    const key = editingKey ?? (() => {
+      const config = getFastConfig();
+      const day = config ? getFastProgress(config).currentDay : 1;
+      return `day${day}-${timeOfDay}`;
+    })();
 
     const entry: VitalsEntry = {
-      timestamp: new Date().toISOString(),
+      timestamp: editingKey
+        ? entries.find(([k]) => k === editingKey)?.[1]?.timestamp ?? new Date().toISOString()
+        : new Date().toISOString(),
       ...(systolic ? { systolic: Number(systolic) } : {}),
       ...(diastolic ? { diastolic: Number(diastolic) } : {}),
       ...(heartRate ? { heartRate: Number(heartRate) } : {}),
@@ -51,18 +68,30 @@ export default function VitalsPage() {
 
     setVitalsEntry(key, entry);
     setSaved(true);
-
-    // Reset form
-    setSystolic("");
-    setDiastolic("");
-    setHeartRate("");
-    setWeight("");
-    setEnergy(null);
-    setMood(null);
-    setNotes("");
+    resetForm();
 
     setTimeout(() => setSaved(false), 2000);
-  }, [timeOfDay, systolic, diastolic, heartRate, weight, energy, mood, notes]);
+  }, [editingKey, timeOfDay, systolic, diastolic, heartRate, weight, energy, mood, notes, entries, resetForm]);
+
+  const handleEdit = useCallback((key: string, entry: VitalsEntry) => {
+    setSystolic(entry.systolic?.toString() ?? "");
+    setDiastolic(entry.diastolic?.toString() ?? "");
+    setHeartRate(entry.heartRate?.toString() ?? "");
+    setWeight(entry.weight?.toString() ?? "");
+    setEnergy(entry.energy ?? null);
+    setMood(entry.mood ?? null);
+    setNotes(entry.notes ?? "");
+    setTimeOfDay(key.includes("morning") ? "morning" : "evening");
+    setEditingKey(key);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
+
+  const handleDelete = useCallback((key: string) => {
+    if (!confirm(`Delete entry "${key.replace("-", " · ")}"?`)) return;
+    deleteVitalsEntry(key);
+    setSaved((v) => !v); // toggle to trigger re-fetch
+    setTimeout(() => setSaved(false), 0);
+  }, []);
 
   const inputClass =
     "w-[100px] min-h-[48px] rounded-lg border border-sand px-3 py-2 text-center font-mono text-charcoal focus:border-seafoam focus:outline-none transition-colors";
@@ -194,12 +223,22 @@ export default function VitalsPage() {
         </div>
 
         {/* Save button */}
-        <button
-          onClick={handleSave}
-          className="w-full py-3.5 rounded-full bg-seafoam text-white font-semibold text-[15px] transition-colors hover:bg-seafoam-dark active:bg-seafoam-deeper"
-        >
-          {saved ? "Saved ✓" : "Save"}
-        </button>
+        <div className="flex gap-3">
+          {editingKey && (
+            <button
+              onClick={resetForm}
+              className="flex-1 py-3.5 rounded-full bg-sand/50 text-stone font-semibold text-[15px] transition-colors hover:bg-sand"
+            >
+              Cancel
+            </button>
+          )}
+          <button
+            onClick={handleSave}
+            className={`${editingKey ? "flex-1" : "w-full"} py-3.5 rounded-full bg-seafoam text-white font-semibold text-[15px] transition-colors hover:bg-seafoam-dark active:bg-seafoam-deeper`}
+          >
+            {saved ? "Saved ✓" : editingKey ? "Update" : "Save"}
+          </button>
+        </div>
 
         {/* Previous entries */}
         {entries.length > 0 && (
@@ -224,9 +263,20 @@ export default function VitalsPage() {
                         })}{" "}
                         {label}
                       </span>
-                      <span className="text-xs text-dust capitalize">
-                        {key.replace("-", " · ")}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEdit(key, entry)}
+                          className="text-xs text-seafoam font-medium px-2 py-1 rounded hover:bg-seafoam/10 transition-colors"
+                        >
+                          Edit
+                        </button>
+                        <button
+                          onClick={() => handleDelete(key)}
+                          className="text-xs text-muted-red font-medium px-2 py-1 rounded hover:bg-muted-red/10 transition-colors"
+                        >
+                          Delete
+                        </button>
+                      </div>
                     </div>
                     <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-charcoal">
                       {entry.systolic && entry.diastolic && (

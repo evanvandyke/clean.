@@ -205,15 +205,14 @@ export function getGuideForDay(day: number): DayGuide {
 }
 
 export const checklistItems = [
-  { id: "morningLMNT", label: "Morning LMNT packet", group: "Electrolytes" },
+  { id: "morningLMNT", label: "Morning electrolyte packet", group: "Electrolytes" },
   { id: "morningBroth", label: "Morning bone broth with salt", group: "Electrolytes" },
-  { id: "middayLMNT", label: "Midday LMNT packet", group: "Electrolytes" },
-  { id: "afternoonLMNT", label: "Afternoon LMNT packet", group: "Electrolytes" },
+  { id: "middayLMNT", label: "Midday electrolyte packet", group: "Electrolytes" },
+  { id: "afternoonLMNT", label: "Afternoon electrolyte packet", group: "Electrolytes" },
   { id: "eveningBroth", label: "Evening bone broth with salt", group: "Electrolytes" },
-  { id: "prebedLMNT", label: "Pre-bed LMNT packet", group: "Electrolytes" },
+  { id: "prebedLMNT", label: "Pre-bed electrolyte packet", group: "Electrolytes" },
   { id: "magnesium", label: "Magnesium 200mg with bone broth", group: "Supplements" },
   { id: "chamomile", label: "Chamomile tea", group: "Supplements" },
-  { id: "water80oz", label: "80oz water minimum", group: "Basics" },
   { id: "buddyCheckin", label: "Checked in with fasting buddy", group: "Basics" },
 ];
 

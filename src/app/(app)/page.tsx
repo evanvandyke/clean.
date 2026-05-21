@@ -194,32 +194,14 @@ export default function DashboardPage() {
             {previewItems.map((item) => {
               const checked = todayChecklist[item.id] || false;
               return (
-                <li key={item.id} className="flex items-center gap-3">
-                  <div
-                    className={`w-5 h-5 rounded flex items-center justify-center border ${
-                      checked
-                        ? "bg-amber border-amber"
-                        : "border-sand bg-white"
+                <li key={item.id} className="flex items-center gap-2.5">
+                  <span
+                    className={`text-sm leading-none ${
+                      checked ? "text-dust" : "text-charcoal"
                     }`}
                   >
-                    {checked && (
-                      <svg
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        className="text-white"
-                      >
-                        <path
-                          d="M2.5 6L5 8.5L9.5 3.5"
-                          stroke="currentColor"
-                          strokeWidth="1.75"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </div>
+                    {checked ? "—" : "•"}
+                  </span>
                   <span
                     className={`text-sm ${
                       checked ? "text-dust line-through" : "text-charcoal"
